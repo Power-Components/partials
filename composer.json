@@ -1,0 +1,33 @@
+{
+    "name": "power-components/partials",
+    "type": "library",
+    "license": "MIT",
+    "homepage": "https://github.com/power-components/livewire-powergrid",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Luan Freitas",
+            "email": "luanfreitas10@protonmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "livewire/livewire": "^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "PowerComponents\\Partials\\": "src/"
+        },
+        "files": [
+            "src/functions.php"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "PowerComponents\\Partials\\PartialsServiceProvider"
+            ]
+        }
+    }
+}

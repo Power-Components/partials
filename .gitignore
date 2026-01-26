@@ -1,0 +1,6 @@
+.env
+laradumps.yaml
+vendor/
+composer.lock
+.idea
+.DS_Store
