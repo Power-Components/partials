@@ -1,9 +1,10 @@
 <?php
 
+use Livewire\Component;
 use PowerComponents\Partials\PartialsHook;
 
 if (! function_exists('partials')) {
-    function partials(?Livewire\Component $component = null): PartialsHook
+    function partials(?Component $component = null): PartialsHook
     {
         $partialsHook = app(PartialsHook::class);
 

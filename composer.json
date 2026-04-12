@@ -2,7 +2,7 @@
     "name": "power-components/partials",
     "type": "library",
     "license": "MIT",
-    "homepage": "https://github.com/power-components/livewire-powergrid",
+    "homepage": "https://github.com/power-components/partials",
     "minimum-stability": "dev",
     "authors": [
         {
