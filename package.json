@@ -1,0 +1,26 @@
+{
+  "name": "partials",
+  "version": "1.0.0",
+  "description": "Livewire Partials provide a structured and explicit way to update **specific DOM fragments** of a Livewire component instead of re-rendering the entire component tree.   This is especially useful for complex components such as data tables, where partial updates significantly improve performance and user experience.",
+  "homepage": "https://github.com/Power-Components/partials#readme",
+  "bugs": {
+    "url": "https://github.com/Power-Components/partials/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Power-Components/partials.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "playwright": "^1.60.0"
+  }
+}
