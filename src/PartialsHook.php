@@ -4,9 +4,11 @@ namespace PowerComponents\Partials;
 
 use Closure;
 use Illuminate\View\View;
-use Livewire\{Component, ComponentHook};
+use Livewire\Component;
+use Livewire\ComponentHook;
 use Livewire\Drawer\Utils;
-use Livewire\Mechanisms\HandleComponents\{ComponentContext, ViewContext};
+use Livewire\Mechanisms\HandleComponents\ComponentContext;
+use Livewire\Mechanisms\HandleComponents\ViewContext;
 use PowerComponents\Partials\Attribute\PartialRender;
 use ReflectionMethod;
 

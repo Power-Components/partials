@@ -4,3 +4,5 @@ vendor/
 composer.lock
 .idea
 .DS_Store
+tests/Browser/Screenshots
+node_modules

@@ -26,10 +26,6 @@ document.addEventListener('livewire:init', () => {
                         continue
                     }
 
-                    if (els.length > 1) {
-                        throw `Multiple elements found for partial [${name}].`
-                    }
-
                     let el = els[0]
 
                     const getIgnoreKey = (node) => {

@@ -3,7 +3,7 @@
     "type": "library",
     "license": "MIT",
     "homepage": "https://github.com/power-components/partials",
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "authors": [
         {
             "name": "Luan Freitas",
@@ -23,11 +23,29 @@
             "src/functions.php"
         ]
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
     "extra": {
         "laravel": {
             "providers": [
                 "PowerComponents\\Partials\\PartialsServiceProvider"
             ]
+        }
+    },
+    "require-dev": {
+        "pestphp/pest": "^4.0",
+        "pestphp/pest-plugin-laravel": "^4.0",
+        "orchestra/testbench": "^10.0",
+        "pestphp/pest-plugin-browser": "^4.0",
+        "laravel/pint": "^1.29",
+        "mockery/mockery": "^1.6.12"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
         }
     }
 }
