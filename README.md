@@ -7,7 +7,7 @@ This is especially useful for complex components such as data tables, where part
 
 ## Requirements
 
-- PHP 8.2+
+- PHP 8.3+
 - Livewire ^4.0
 
 ---
