@@ -447,3 +447,77 @@ it('preserves data attributes on search input when sorting', function () {
     $currentDataUniqid = $page->script('() => document.querySelector("#search-input").getAttribute("data-uniqid")');
     expect($currentDataUniqid)->toBe($initialDataUniqid);
 });
+
+it('demonstrates payload size difference between partial and full render', function () {
+    $template = <<<'HTML'
+        <html>
+            <head>
+                @livewireStyles
+                <style>
+                    table { border-collapse: collapse; width: 100%; }
+                    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                </style>
+            </head>
+            <body>
+                <livewire:browser-table-component />
+                @livewireScripts
+                <script type="module" src="/powergrid-partials/partials.js"></script>
+            </body>
+        </html>
+HTML;
+
+    Route::get('/perf-comparison-loading', fn () => Blade::render($template))->middleware('web');
+
+    // Create a version without partials
+    class TableStandardComparison extends TableLoadingBrowserTest
+    {
+        public function sortBy(string $field): void {}
+
+        public function render()
+        {
+            return str_replace('wire:partial="table-partial"', '', parent::render());
+        }
+    }
+    Livewire::component('standard-comparison', TableStandardComparison::class);
+
+    Route::get('/perf-comparison-standard', fn () => Blade::render(str_replace('browser-table-component', 'standard-comparison', $template)))->middleware('web');
+
+    // 1. Partial
+    $page = $this->visit('/perf-comparison-loading');
+
+    $page->script(<<<'JS'
+        () => {
+            window.__payloadSize = null;
+            Livewire.interceptMessage(({ message, onSuccess }) => {
+                onSuccess(({ payload }) => {
+                    window.__payloadSize = JSON.stringify(payload).length;
+                });
+            });
+        }
+    JS);
+
+    $page->click('#sort-name')->waitForEvent('networkidle');
+    $page->assertScript('() => window.__payloadSize !== null');
+    $partialSize = (int) $page->script('() => window.__payloadSize');
+
+    // 2. Standard
+    $page = $this->visit('/perf-comparison-standard');
+
+    $page->script(<<<'JS'
+        () => {
+            window.__payloadSize = null;
+            Livewire.interceptMessage(({ message, onSuccess }) => {
+                onSuccess(({ payload }) => {
+                    window.__payloadSize = JSON.stringify(payload).length;
+                });
+            });
+        }
+    JS);
+
+    $page->click('#sort-name')->waitForEvent('networkidle');
+    $page->assertScript('() => window.__payloadSize !== null');
+    $fullSize = (int) $page->script('() => window.__payloadSize');
+
+    expect($partialSize)->toBeGreaterThan(0)
+        ->and($fullSize)->toBeGreaterThan($partialSize);
+});
