@@ -1,0 +1,1 @@
+<div id="count-value">Count: {{ $__partial->count }} (Uniqid: {{ uniqid() }})</div>
