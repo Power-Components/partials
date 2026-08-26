@@ -177,9 +177,43 @@ BLADE;
     }
 }
 
+class TableInlineFiltersBrowserTest extends Component
+{
+    public int $pageNumber = 1;
+
+    public string $filterUniqid;
+
+    public function mount(): void
+    {
+        $this->filterUniqid = uniqid('filter-');
+    }
+
+    public function nextPage(): void
+    {
+        $this->pageNumber++;
+
+        partials($this)->partial('table-body', 'table-inline-filters-body');
+    }
+
+    public function render()
+    {
+        return <<<'BLADE'
+            <div>
+                <table>
+                    <tbody wire:partial="table-body">
+                        @include('table-inline-filters-body', ['__partial' => $this])
+                    </tbody>
+                </table>
+                <button id="next-page" wire:click="nextPage" type="button">Next</button>
+            </div>
+        BLADE;
+    }
+}
+
 beforeEach(function () {
     Livewire::component('browser-table-component', TableLoadingBrowserTest::class);
     Livewire::component('browser-loading-component', TableWithLoadingBrowserTest::class);
+    Livewire::component('browser-inline-filters-component', TableInlineFiltersBrowserTest::class);
 
     Route::get('/browser-table-test', fn () => Blade::render('
         <html>
@@ -213,6 +247,23 @@ beforeEach(function () {
             </head>
             <body>
                 <livewire:browser-loading-component />
+                @livewireScripts
+                <script type="module" src="/powergrid-partials/partials.js"></script>
+            </body>
+        </html>
+    '))->middleware('web');
+
+    Route::get('/browser-inline-filters-test', fn () => Blade::render('
+        <html>
+            <head>
+                <style>
+                    table { border-collapse: collapse; width: 100%; }
+                    td { border: 1px solid #ddd; padding: 8px; }
+                </style>
+                @livewireStyles
+            </head>
+            <body>
+                <livewire:browser-inline-filters-component />
                 @livewireScripts
                 <script type="module" src="/powergrid-partials/partials.js"></script>
             </body>
@@ -520,4 +571,17 @@ HTML;
 
     expect($partialSize)->toBeGreaterThan(0)
         ->and($fullSize)->toBeGreaterThan($partialSize);
+});
+
+it('updates tbody rows while preserving an ignored inline-filter row', function () {
+    $page = $this->visit('/browser-inline-filters-test')
+        ->assertSeeIn('#page-cell', 'page-1');
+
+    $filterBefore = $page->text('#filter-cell');
+
+    $page->click('#next-page')
+        ->waitForEvent('networkidle')
+        ->assertSeeIn('#page-cell', 'page-2');
+
+    expect($page->text('#filter-cell'))->toBe($filterBefore);
 });
